@@ -10,7 +10,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         posts: action.payload,
         isLoading: false,
-        error: null,
       };
 
     case 'TOGGLE_COMMENTS':
@@ -44,14 +43,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         posts: updatedPostsWithComments,
         isLoading: false,
-        error: null,
       };
-    case 'FETCH_COMMENTS_FAILURE':
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error,
-      };
+   
     default:
       return state;
   }

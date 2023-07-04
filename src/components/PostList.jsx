@@ -1,27 +1,28 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, toggleComments, fetchComments } from '../redux/actions';
 
-const PostList = ({ posts, isLoading, error, fetchPosts, toggleComments, fetchComments }) => {
+const PostList = () => {
+  const posts = useSelector(state => state.posts);
+  const isLoading = useSelector(state => state.isLoading);
+  const error = useSelector(state => state.error);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   const handlePostClick = (postId) => {
     const post = posts?.find((post) => post.id === postId);
     if (post.showComments) {
-      toggleComments(postId);
+      dispatch(toggleComments(postId));
     } else {
-      fetchComments(postId);
+      dispatch(fetchComments(postId));
     }
   };
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
   }
 
   return (
@@ -43,16 +44,4 @@ const PostList = ({ posts, isLoading, error, fetchPosts, toggleComments, fetchCo
   );
 };
 
-const mapStateToProps = (state) => ({
-  posts: state.posts,
-  isLoading: state.isLoading,
-  error: state.error,
-});
-
-const mapDispatchToProps = {
-  fetchPosts,
-  toggleComments,
-  fetchComments,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostList);
+export default PostList;
